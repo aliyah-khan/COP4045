@@ -1,5 +1,5 @@
 def find_dup_str(s, n):
-    #check every possible first substring
+    #checking every possible first substring
     for i in range(len(s) - n + 1):
         sub = s[i:i+n]
         
@@ -11,7 +11,7 @@ def find_dup_str(s, n):
 
 
 def find_max_dup(s):
-    #start with the longest possible substring
+    #starting with the longest possible substring
     for n in range(len(s), 0, -1):
         result = find_dup_str(s, n)
         if result != "":
