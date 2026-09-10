@@ -14,14 +14,14 @@ def plot_function(fun_str, domain, ns):
         xs.append(x)
     
     #calculating y values by inputting x
-    #into the given formula
+    #into the user's formula
     ys = []
     for x in xs:
         y = eval(fun_str)
         ys.append(y)
         
     #printing the table of points
-    print("       x       y")
+    print("\n       x          y")
     print("-----------------------")
     
     for i in range(min(12, len(xs))):
