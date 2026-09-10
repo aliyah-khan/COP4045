@@ -1,3 +1,4 @@
+#aliyah khan
 #3
 def find_dup_str(s, n):
     #checking every possible first substring

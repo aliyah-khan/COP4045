@@ -1,3 +1,4 @@
+#aliyah khan
 #2
 def find_Pythagorean(n):
     triplesList = []

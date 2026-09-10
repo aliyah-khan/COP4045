@@ -23,7 +23,7 @@ def quadratic(a, b, c):
     return a, b, c, radical
 
 while True:
-    a = input("Enter a: ")
+    a = input("Enter a: ") 
     if a == "":
         break
     b = input("Enter b: ")
