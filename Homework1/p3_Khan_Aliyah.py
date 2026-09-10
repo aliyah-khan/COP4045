@@ -18,8 +18,6 @@ def find_max_dup(s):
             return result
     return ""
 
-
-#test find_dup_str
 s = input("Enter a string: ")
 n = int(input("Enter substring length: "))
 
