@@ -1,8 +1,9 @@
+#aliyah khan
+#1 
 import math
 import matplotlib.pyplot as plt
 import numpy as np
 
-#q1
 def quadratic(a, b, c):
     a = float(a)
     b = float(b)
