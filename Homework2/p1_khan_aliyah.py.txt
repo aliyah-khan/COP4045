@@ -1,0 +1,143 @@
+1. #aliyah khan
+2. #1
+3. 
+4. def line_number(infile: str, outfile: str) -> None:
+5.     """reads infile and writes each line to outfile with the line number in front"""
+6.     try:
+7.         f = open(infile, "r")
+8.         lines = f.readlines()
+9.         f.close()
+10. 
+11.         out = open(outfile, "w")
+12.         count = 1
+13.         for line in lines:
+14.             out.write(str(count) + ". " + line)
+15.             if not line.endswith("\n"):
+16.                 out.write("\n")
+17.             count = count + 1
+18.         out.close()
+19. 
+20.     except Exception as e:
+21.         print("something went wrong reading or writing the file:", e)
+22.         raise
+23. 
+24. 
+25. def findcommentindex(line):
+26.     #finds where a comment starts, ignoring a # if it's inside quotes
+27.     insidequote = False
+28.     quotechar = ""
+29.     index = 0
+30.     while index < len(line):
+31.         ch = line[index]
+32.         if insidequote:
+33.             if ch == quotechar:
+34.                 insidequote = False
+35.         else:
+36.             if ch == '"' or ch == "'":
+37.                 insidequote = True
+38.                 quotechar = ch
+39.             elif ch == "#":
+40.                 return index
+41.         index = index + 1
+42.     return -1
+43. 
+44. 
+45. def parse_functions(filename: str) -> tuple:
+46.     """parses filename and returns a tuple of tuples, one per top level function,
+47.     sorted by name, as (line number, function name, argument list, function code)"""
+48.     try:
+49.         f = open(filename, "r")
+50.         lines = f.readlines()
+51.         f.close()
+52. 
+53.         funcs = []
+54.         i = 0
+55.         while i < len(lines):
+56.             line = lines[i]
+57. 
+58.             if line.startswith("def "):
+59.                 startline = i + 1
+60. 
+61.                 #pulling out the function name and argument list
+62.                 openparen = line.find("(")
+63.                 closeparen = line.find(")")
+64.                 name = line[4:openparen].strip()
+65.                 args = line[openparen + 1:closeparen].strip()
+66. 
+67.                 #collecting the lines that belong to this function
+68.                 codelines = []
+69.                 j = i
+70.                 while j < len(lines):
+71.                     current = lines[j]
+72. 
+73.                     #stopping once we reach another line with no indent
+74.                     if j > i:
+75.                         indent = len(current) - len(current.lstrip())
+76.                         if current.strip() != "" and indent == 0:
+77.                             break
+78. 
+79.                     #cutting off a comment if the line has one
+80.                     commentindex = findcommentindex(current)
+81.                     if commentindex != -1:
+82.                         current = current[:commentindex]
+83.                     current = current.rstrip()
+84. 
+85.                     if current.strip() != "":
+86.                         codelines.append(current)
+87. 
+88.                     j = j + 1
+89. 
+90.                 code = ""
+91.                 for codeline in codelines:
+92.                     code = code + codeline + "\n"
+93. 
+94.                 funcs.append((startline, name, args, code))
+95.                 i = j
+96. 
+97.             else:
+98.                 i = i + 1
+99. 
+100.         #sorting the functions alphabetically by name with a selection sort
+101.         n = len(funcs)
+102.         for x in range(n):
+103.             smallest = x
+104.             for y in range(x + 1, n):
+105.                 if funcs[y][1] < funcs[smallest][1]:
+106.                     smallest = y
+107.             if smallest != x:
+108.                 temp = funcs[x]
+109.                 funcs[x] = funcs[smallest]
+110.                 funcs[smallest] = temp
+111. 
+112.         return tuple(funcs)
+113. 
+114.     except Exception as e:
+115.         print("something went wrong parsing the file:", e)
+116.         raise
+117. 
+118. 
+119. def main():
+120.     print("aliyah khan z23556724")
+121.     thisfile = "p1_Khan_Aliyah.py"
+122. 
+123.     #testing line_number, writing to a new file so i don't overwrite this one
+124.     outfile = thisfile + ".txt"
+125.     line_number(thisfile, outfile)
+126.     print("wrote numbered lines of", thisfile, "to", outfile)
+127. 
+128.     #testing parse_functions
+129.     funcs = parse_functions(thisfile)
+130.     print()
+131.     print("parse_functions result:")
+132.     for func in funcs:
+133.         linenum = func[0]
+134.         name = func[1]
+135.         args = func[2]
+136.         code = func[3]
+137.         print()
+138.         print("line", linenum, ":", name, "(", args, ")")
+139.         print(code)
+140. 
+141. 
+142. if __name__ == "__main__":
+143.     main()
